@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/mail"
 	"os"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -20,8 +22,9 @@ type rsp struct {
 }
 
 type Subscriber struct {
-	Email string
-	Confirmed bool
+	Email            string
+	Confirmed        bool
+	ConfirmationCode int
 }
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -50,9 +53,17 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	svc := dynamodb.New(sess)
 
+	// create a confirmation code
+	rand.Seed(time.Now().UnixNano())
+	max := 9999999
+	min := 1111111
+
+	code := rand.Intn(max-min) + min
+
 	data := Subscriber{
-		Email: email,
-		Confirmed: false,
+		Email:            email,
+		Confirmed:        false,
+		ConfirmationCode: code,
 	}
 
 	av, err := dynamodbattribute.MarshalMap(data)

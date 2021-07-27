@@ -33,6 +33,8 @@ Resources:
           AttributeType: S
         - AttributeName: Confirmed
           AttributeType: BOOL
+        - AttributeName: ConfirmationCode
+          AttributeType: N
       KeySchema:
         - AttributeName: Email
           KeyType: HASH
