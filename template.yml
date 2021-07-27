@@ -19,6 +19,9 @@ Resources:
           Properties:
             Path: /subscribe
             Method: get
+            RequestParameters:
+              - method.request.querystring.email:
+                  Required: true
 
 Outputs:
 

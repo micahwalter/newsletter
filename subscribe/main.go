@@ -1,32 +1,37 @@
 package main
 
 import (
-	"math/rand"
-	"time"
+	"encoding/json"
+	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
+type rsp struct {
+	Email string `json:"email"`
+	Stat  string `json:"stat"`
+}
+
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	rand.Seed(time.Now().UnixNano())
+	fmt.Printf("Processing request data for request %s.\n", request.RequestContext.RequestID)
+	fmt.Printf("Body size = %d.\n", len(request.Body))
+	fmt.Printf("Email: %s.\n", request.QueryStringParameters["email"])
 
-	sayings := []string{
-		"hello",
-		"heellloo",
+	fmt.Println("Headers:")
+	for key, value := range request.Headers {
+		fmt.Printf("    %s: %s\n", key, value)
 	}
 
-	randomSaying := rand.Intn(len(sayings))
+	body := rsp{
+		Email: request.QueryStringParameters["email"],
+		Stat:  "ok",
+	}
 
-	return events.APIGatewayProxyResponse{
-		Body:       string(sayings[randomSaying]),
-		StatusCode: 200,
-		Headers: map[string]string{
-			"Content-Type":                "application/json",
-			"Access-Control-Allow-Origin": "*",
-		},
-	}, nil
+	b, _ := json.Marshal(body)
+
+	return events.APIGatewayProxyResponse{Body: string(b), StatusCode: 200}, nil
 }
 
 func main() {
