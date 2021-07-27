@@ -21,6 +21,7 @@ type rsp struct {
 
 type Subscriber struct {
 	Email string
+	Confirmed bool
 }
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -51,6 +52,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	data := Subscriber{
 		Email: email,
+		Confirmed: false,
 	}
 
 	av, err := dynamodbattribute.MarshalMap(data)

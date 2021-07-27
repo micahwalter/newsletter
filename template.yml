@@ -31,6 +31,8 @@ Resources:
       AttributeDefinitions:
         - AttributeName: Email
           AttributeType: S
+        - AttributeName: Confirmed
+          AttributeType: BOOL
       KeySchema:
         - AttributeName: Email
           KeyType: HASH
