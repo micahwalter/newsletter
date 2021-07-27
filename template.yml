@@ -8,8 +8,11 @@ Resources:
   SubscribeFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: subscribe/main
+      CodeUri: subscribe
+      Handler: main
       Runtime: go1.x
+      Policies:
+        - AmazonDynamoDBFullAccess
       Events:
         GetEvent:
           Type: Api
