@@ -22,7 +22,27 @@ Resources:
             RequestParameters:
               - method.request.querystring.email:
                   Required: true
-  
+
+  ConfirmFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: confirm
+      Handler: main
+      Runtime: go1.x
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /confirm
+            Method: get
+            RequestParameters:
+              - method.request.querystring.email:
+                  Required: true
+              - method.request.querystring.code:
+                  Required: true
+
   SubscribersDynamoDBTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
